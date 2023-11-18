@@ -12,6 +12,9 @@ on:
       version:
         description: 'Enter the version number:'
         required: true
+      channel:
+        description: 'Enter Channel: alpha beta stable'
+        required: true
 
 jobs:
   patch-and-upload:
@@ -27,6 +30,21 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
+      - name: Send arm64-v8a message to Telegram
+        env:
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+        run: |
+          MESSAGE="🆕 ${{ github.event.inputs.version }} arm64-v8a & armeabi-v7a \`${{ github.event.inputs.version }}\`"
+          RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          ESCAPED_RUN_URL=$(echo $RUN_URL | sed 's/-/\\-/g')
+          KEYBOARD="{\"inline_keyboard\":[[{\"text\":\"Download\",\"url\":\"${ESCAPED_RUN_URL}\"}]]}"
+          curl -s -X POST \"https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage\" \
+            -d chat_id=\"${TG_CHAT_ID}\" \
+            -d text=\"${MESSAGE}\" \
+            -d parse_mode=\"MarkdownV2\" \
+            -d reply_markup=\"${KEYBOARD}\"
+      
       - name: Download IGExperimentsPatcher and uber-apk-signer
         run: |
           wget --show-progress -q --progress=bar:force:noscroll https://github.com/xHookman/IGExperimentsPatcher/releases/download/1.0/IGExperimentsPatcher.jar -O IGExperimentsPatcher.jar
@@ -63,9 +81,10 @@ jobs:
         run: |
           MESSAGE="🆕 arm64-v8a & armeabi-v7a \`${{ github.event.inputs.version }}\`"
           RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          KEYBOARD='{"inline_keyboard":[[{"text":"Download","url":"'"$RUN_URL"'"}]]}'
-          curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \
-           -d chat_id="$TG_CHAT_ID" \
-           -d text="$MESSAGE" \
-           -d parse_mode="MarkdownV2" \
-           -d reply_markup="$KEYBOARD"
+          ESCAPED_RUN_URL=$(echo $RUN_URL | sed 's/-/\\-/g')
+          KEYBOARD="{\"inline_keyboard\":[[{\"text\":\"Download\",\"url\":\"${ESCAPED_RUN_URL}\"}]]}"
+          curl -s -X POST \"https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage\" \
+            -d chat_id=\"${TG_CHAT_ID}\" \
+            -d text=\"${MESSAGE}\" \
+            -d parse_mode=\"MarkdownV2\" \
+            -d reply_markup=\"${KEYBOARD}\"
