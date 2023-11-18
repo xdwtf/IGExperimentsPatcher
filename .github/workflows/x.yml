@@ -53,5 +53,15 @@ jobs:
           name: ${{ inputs.version }}
           path: ${{ inputs.version }}-patched-aligned-debugSigned.apk  # Change this to the actual patched APK path
 
-      - name: Get Workflow URL
-        run: echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Send message to Telegram
+        env:
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+        run: |
+          MESSAGE="🆕 `${{ inputs.version }}`"
+          KEYBOARD='{"inline_keyboard":[[{"text":"Download","url":"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}]]}'
+          curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \
+           -d chat_id="$TG_CHAT_ID" \
+           -d text="$MESSAGE" \
+           -d parse_mode="MarkdownV2" \
+           -d reply_markup="$KEYBOARD"
