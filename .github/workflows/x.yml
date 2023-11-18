@@ -53,13 +53,5 @@ jobs:
           name: ${{ inputs.version }}
           path: ${{ inputs.version }}-patched-aligned-debugSigned.apk  # Change this to the actual patched APK path
 
-      - name: Get Artifact URL
-        id: get_url
-        run: echo "::set-output name=url::${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-        env:
-          GITHUB_SERVER_URL: ${{ github.server_url }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_RUN_ID: ${{ github.run_id }}
-
-      - name: Print Artifact URL
-        run: echo "Artifact URL: ${{ steps.get_url.outputs.url }}"
+      - name: Get Workflow URL
+        run: echo "Workflow URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
