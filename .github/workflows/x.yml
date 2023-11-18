@@ -22,7 +22,7 @@ jobs:
 
       - name: Download apk
         run: |
-          wget https://dl.NoGutsNoGlory.eu.org/289858/com_instagram_android_309_0_0_40_113_370911736_minAPI24_armeabi.apk?hash=DDgoo9J -O igarm64v8.apk
+          wget https://dl.NoGutsNoGlory.eu.org/289861/com_instagram_android_300_0_0_0_60_370004451_minAPI28_arm64_v8a.apk?hash=vGpveBd -O igarm64v8.apk
           
       - name: Patch APK
         run: java -jar IGExperimentsPatcher.jar igarm64v8.apk
