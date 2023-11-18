@@ -35,7 +35,7 @@ jobs:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
         run: |
-          MESSAGE="🆕 \`${{ github.event.inputs.channel }} ${{ github.event.inputs.version }}\` arm64v8a & armeabiv7a"
+          MESSAGE="🆕 \`${{ github.event.inputs.channel }} ${{ github.event.inputs.version }}\` arm64v8a | armeabiv7a"
           RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           KEYBOARD='{"inline_keyboard":[[{"text":"Download","url":"'"$RUN_URL"'"}]]}'
           curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \
@@ -78,7 +78,7 @@ jobs:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
         run: |
-          MESSAGE="🆕 \`${{ github.event.inputs.channel }} ${{ github.event.inputs.version }}\` arm64v8a & armeabiv7a"
+          MESSAGE="🆕 \`${{ github.event.inputs.channel }} ${{ github.event.inputs.version }}\` arm64v8a armeabiv7a"
           RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           KEYBOARD='{"inline_keyboard":[[{"text":"Download","url":"'"$RUN_URL"'"}]]}'
           curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \
