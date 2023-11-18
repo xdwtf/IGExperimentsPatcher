@@ -39,8 +39,8 @@ jobs:
           apk_files=$(find . -type f -name '*.apk')
           echo "Found APK files: $apk_files"
       
-      - name: Upload Artifact
+      - name: Upload signed Artifact
         uses: actions/upload-artifact@v2
         with:
           name: patched-apk
-          path: igarm64v8-patched.apk  # Change this to the actual patched APK path
+          path: igarm64v8-patched-aligned-debugSigned.apk  # Change this to the actual patched APK path
