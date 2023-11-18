@@ -30,20 +30,19 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
-      - name: Send arm64-v8a message to Telegram
+      - name: Send message to Telegram
         env:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
         run: |
-          MESSAGE="🆕 ${{ github.event.channel.version }} ${{ github.event.inputs.version }} arm64-v8a & armeabi-v7a"
+          MESSAGE="🆕 \`${{ github.event.channel.version }} ${{ github.event.inputs.version }} arm64-v8a & armeabi-v7a\`"
           RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          ESCAPED_RUN_URL=$(echo $RUN_URL | sed 's/-/\\-/g')
-          KEYBOARD="{\"inline_keyboard\":[[{\"text\":\"Download\",\"url\":\"${ESCAPED_RUN_URL}\"}]]}"
-          curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
-          -d chat_id="${TG_CHAT_ID}" \
-          -d text="${MESSAGE}" \
-          -d parse_mode="MarkdownV2" \
-          -d reply_markup="${KEYBOARD}"
+          KEYBOARD='{"inline_keyboard":[[{"text":"Download","url":"'"$RUN_URL"'"}]]}'
+          curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \
+           -d chat_id="$TG_CHAT_ID" \
+           -d text="$MESSAGE" \
+           -d parse_mode="MarkdownV2" \
+           -d reply_markup="$KEYBOARD"
       
       - name: Download IGExperimentsPatcher and uber-apk-signer
         run: |
@@ -74,17 +73,16 @@ jobs:
           name: armeabi-v7a_${{ github.event.inputs.version }}
           path: armeabi-v7a_${{ github.event.inputs.version }}-patched-aligned-debugSigned.apk
 
-      - name: Send arm64-v8a message to Telegram
+      - name: Send message to Telegram
         env:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
         run: |
-          MESSAGE="🆕 ${{ github.event.channel.version }} ${{ github.event.inputs.version }} arm64-v8a & armeabi-v7a"
+          MESSAGE="🆕 \`${{ github.event.channel.version }} ${{ github.event.inputs.version }} arm64-v8a & armeabi-v7a\`"
           RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          ESCAPED_RUN_URL=$(echo $RUN_URL | sed 's/-/\\-/g')
-          KEYBOARD="{\"inline_keyboard\":[[{\"text\":\"Download\",\"url\":\"${ESCAPED_RUN_URL}\"}]]}"
-          curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
-          -d chat_id="${TG_CHAT_ID}" \
-          -d text="${MESSAGE}" \
-          -d parse_mode="MarkdownV2" \
-          -d reply_markup="${KEYBOARD}"
+          KEYBOARD='{"inline_keyboard":[[{"text":"Download","url":"'"$RUN_URL"'"}]]}'
+          curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \
+           -d chat_id="$TG_CHAT_ID" \
+           -d text="$MESSAGE" \
+           -d parse_mode="MarkdownV2" \
+           -d reply_markup="$KEYBOARD"
