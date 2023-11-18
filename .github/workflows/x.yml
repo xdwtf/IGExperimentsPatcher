@@ -35,7 +35,7 @@ jobs:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
         run: |
-          MESSAGE="🆕 ${{ github.event.inputs.version }} arm64-v8a & armeabi-v7a \`${{ github.event.inputs.version }}\`"
+          MESSAGE="🆕 ${{ github.event.channel.version }} ${{ github.event.inputs.version }} arm64-v8a & armeabi-v7a"
           RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           ESCAPED_RUN_URL=$(echo $RUN_URL | sed 's/-/\\-/g')
           KEYBOARD="{\"inline_keyboard\":[[{\"text\":\"Download\",\"url\":\"${ESCAPED_RUN_URL}\"}]]}"
@@ -79,7 +79,7 @@ jobs:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
         run: |
-          MESSAGE="🆕 arm64-v8a & armeabi-v7a \`${{ github.event.inputs.version }}\`"
+          MESSAGE="🆕 ${{ github.event.channel.version }} ${{ github.event.inputs.version }} arm64-v8a & armeabi-v7a"
           RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           ESCAPED_RUN_URL=$(echo $RUN_URL | sed 's/-/\\-/g')
           KEYBOARD="{\"inline_keyboard\":[[{\"text\":\"Download\",\"url\":\"${ESCAPED_RUN_URL}\"}]]}"
