@@ -1,0 +1,26 @@
+name: Patch APK and Upload Artifact
+
+on: workflow_dispatch
+
+jobs:
+  patch-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'  # Change this to your required Java version
+
+      - name: Patch APK
+        run: java -jar IGExperimentsPatcher.jar path/to/yourApkToPatch.apk
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: patched-apk
+          path: path/to/yourApkToPatch_patched.apk  # Change this to the actual patched APK path
