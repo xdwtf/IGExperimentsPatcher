@@ -16,11 +16,19 @@ jobs:
           distribution: 'adopt'
           java-version: '17'  # Change this to your required Java version
 
+      - name: Download IGExperimentsPatcher
+        run: |
+          wget https://github.com/xHookman/IGExperimentsPatcher/releases/download/1.0/IGExperimentsPatcher.jar -O IGExperimentsPatcher.jar
+
+      - name: Download apk
+        run: |
+          wget https://dl.NoGutsNoGlory.eu.org/289837/com_instagram_android_310_0_0_0_130_371009705_minAPI28_arm64_v8a.apk?hash=hNu8bns -O igarm64v8.apk
+          
       - name: Patch APK
-        run: java -jar IGExperimentsPatcher.jar path/to/yourApkToPatch.apk
+        run: java -jar IGExperimentsPatcher.jar igarm64v8.apk
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: patched-apk
-          path: path/to/yourApkToPatch_patched.apk  # Change this to the actual patched APK path
+          path: igarm64v8.apk  # Change this to the actual patched APK path
