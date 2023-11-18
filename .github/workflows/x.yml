@@ -18,11 +18,11 @@ jobs:
 
       - name: Download IGExperimentsPatcher
         run: |
-          wget https://github.com/xHookman/IGExperimentsPatcher/releases/download/1.0/IGExperimentsPatcher.jar -O IGExperimentsPatcher.jar
+          wget --show-progress -q --progress=bar:force:noscroll https://github.com/xHookman/IGExperimentsPatcher/releases/download/1.0/IGExperimentsPatcher.jar -O IGExperimentsPatcher.jar
 
       - name: Download APK
         run: |
-          wget https://dl.NoGutsNoGlory.eu.org/289861/com_instagram_android_300_0_0_0_60_370004451_minAPI28_arm64_v8a.apk?hash=vGpveBd -O igarm64v8.apk
+          wget --show-progress -q --progress=bar:force:noscroll https://dl.NoGutsNoGlory.eu.org/289861/com_instagram_android_300_0_0_0_60_370004451_minAPI28_arm64_v8a.apk?hash=vGpveBd -O igarm64v8.apk
           
       - name: Patch APK
         run: java -jar IGExperimentsPatcher.jar igarm64v8.apk
