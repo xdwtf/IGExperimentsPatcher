@@ -54,4 +54,4 @@ jobs:
           path: ${{ inputs.version }}-patched-aligned-debugSigned.apk  # Change this to the actual patched APK path
 
       - name: Get Workflow URL
-        run: echo "Workflow URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        run: echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
