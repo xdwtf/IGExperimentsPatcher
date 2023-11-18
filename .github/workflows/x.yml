@@ -1,10 +1,13 @@
-name: Patch APK and Upload Artifact
+name: Patch and Upload APK Variants
 
 on:
   workflow_dispatch:
     inputs:
-      name:
-        description: 'Enter APK URL'
+      arm64_v8a_URL:
+        description: 'Enter arm64-v8a APK URL'
+        required: true
+      armeabi_v7a_URL:
+        description: 'Enter armeabi-v7a APK URL'
         required: true
       version:
         description: 'Enter the version number:'
@@ -22,43 +25,57 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'adopt'
-          java-version: '17'  # Change this to your required Java version
+          java-version: '17'
 
-      - name: Download IGExperimentsPatcher
+      - name: Download IGExperimentsPatcher and uber-apk-signer
         run: |
           wget --show-progress -q --progress=bar:force:noscroll https://github.com/xHookman/IGExperimentsPatcher/releases/download/1.0/IGExperimentsPatcher.jar -O IGExperimentsPatcher.jar
-
-      - name: Download APK
-        run: |
-          wget --show-progress -q --progress=bar:force:noscroll "${{ inputs.name }}" -O "${{ inputs.version }}".apk
-          
-      - name: Patch APK
-        run: java -jar IGExperimentsPatcher.jar ${{ inputs.version }}.apk
-
-      - name: Download uber-apk-signer
-        run: |
           wget --show-progress -q --progress=bar:force:noscroll https://github.com/patrickfav/uber-apk-signer/releases/download/v1.3.0/uber-apk-signer-1.3.0.jar -O uber-apk-signer.jar
 
-      - name: Sign Patched
-        run: java -jar uber-apk-signer.jar -a ${{ inputs.version }}-patched.apk
-      
-      - name: Find APKs
+      - name: Patch and Sign arm64-v8a APK
         run: |
-          apk_files=$(find . -type f -name '*.apk')
-          echo "Found APK files: $apk_files"
-      
-      - name: Upload signed Artifact
+          wget --show-progress -q --progress=bar:force:noscroll "${{ github.event.inputs.arm64_v8a_URL }}" -O arm64-v8a_${{ github.event.inputs.version }}.apk
+          java -jar IGExperimentsPatcher.jar arm64-v8a_${{ github.event.inputs.version }}.apk
+          java -jar uber-apk-signer.jar -a arm64-v8a_${{ github.event.inputs.version }}-patched.apk
+
+      - name: Upload arm64-v8a Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ inputs.version }}
-          path: ${{ inputs.version }}-patched-aligned-debugSigned.apk  # Change this to the actual patched APK path
+          name: arm64-v8a_${{ github.event.inputs.version }}
+          path: arm64-v8a_${{ github.event.inputs.version }}-patched-aligned-debugSigned.apk
 
-      - name: Send message to Telegram
+      - name: Patch and Sign armeabi-v7a APK
+        run: |
+          wget --show-progress -q --progress=bar:force:noscroll "${{ github.event.inputs.armeabi_v7a_URL }}" -O armeabi-v7a_${{ github.event.inputs.version }}.apk
+          java -jar IGExperimentsPatcher.jar armeabi-v7a_${{ github.event.inputs.version }}.apk
+          java -jar uber-apk-signer.jar -a armeabi-v7a_${{ github.event.inputs.version }}-patched.apk
+
+      - name: Upload armeabi-v7a Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: armeabi-v7a_${{ github.event.inputs.version }}
+          path: armeabi-v7a_${{ github.event.inputs.version }}-patched-aligned-debugSigned.apk
+
+      - name: Send arm64-v8a message to Telegram
         env:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
         run: |
-          MESSAGE="🆕 \`${{ github.event.inputs.version }}\`"
+          MESSAGE="🆕 arm64-v8a & armeabi-v7a \`${{ github.event.inputs.version }}\`"
+          RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          KEYBOARD='{"inline_keyboard":[[{"text":"Download","url":"'"$RUN_URL"'"}]]}'
+          curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \
+           -d chat_id="$TG_CHAT_ID" \
+           -d text="$MESSAGE" \
+           -d parse_mode="MarkdownV2" \
+           -d reply_markup="$KEYBOARD"
+
+      - name: Send armeabi-v7a message to Telegram
+        env:
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+        run: |
+          MESSAGE="🆕 armeabi-v7a \`${{ github.event.inputs.version }}\`"
           RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           KEYBOARD='{"inline_keyboard":[[{"text":"Download","url":"'"$RUN_URL"'"}]]}'
           curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \
