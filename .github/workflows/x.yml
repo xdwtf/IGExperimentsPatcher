@@ -38,7 +38,7 @@ jobs:
       - name: Patch and Sign arm64-v8a APK
         run: |
           wget --show-progress -q --progress=bar:force:noscroll "${{ github.event.inputs.arm64_v8a_URL }}" -O arm64-v8a_${{ github.event.inputs.version }}.apk
-          java -jar IGExperimentsPatcher.jar arm64-v8a_${{ github.event.inputs.version }}.apk
+          java -jar IGExperimentsPatcher.jar -p arm64-v8a_${{ github.event.inputs.version }}.apk
           java -jar uber-apk-signer.jar -a arm64-v8a_${{ github.event.inputs.version }}-patched.apk
 
       - name: Upload arm64-v8a Artifact
@@ -50,7 +50,7 @@ jobs:
       - name: Patch and Sign armeabi-v7a APK
         run: |
           wget --show-progress -q --progress=bar:force:noscroll "${{ github.event.inputs.armeabi_v7a_URL }}" -O armeabi-v7a_${{ github.event.inputs.version }}.apk
-          java -jar IGExperimentsPatcher.jar armeabi-v7a_${{ github.event.inputs.version }}.apk
+          java -jar IGExperimentsPatcher.jar -p armeabi-v7a_${{ github.event.inputs.version }}.apk
           java -jar uber-apk-signer.jar -a armeabi-v7a_${{ github.event.inputs.version }}-patched.apk
 
       - name: Upload armeabi-v7a Artifact
