@@ -44,7 +44,7 @@ jobs:
 
       - name: Upload arm64-v8a Artifact
         if: ${{ github.event.inputs.arm64_v8a_URL != '' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: arm64-v8a_${{ github.event.inputs.version }}
           path: arm64-v8a_${{ github.event.inputs.version }}-patched-aligned-debugSigned.apk
@@ -58,7 +58,7 @@ jobs:
 
       - name: Upload armeabi-v7a Artifact
         if: ${{ github.event.inputs.armeabi_v7a_URL != '' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: armeabi-v7a_${{ github.event.inputs.version }}
           path: armeabi-v7a_${{ github.event.inputs.version }}-patched-aligned-debugSigned.apk
